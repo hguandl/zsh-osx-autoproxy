@@ -6,6 +6,7 @@
 () {
     local scutil_output=$(scutil --proxy)
     local -A info=(${(pws: :)${${(M)${(f)scutil_output}:# *[A-Za-z] : [A-Za-z0-9]*}/:}})
+    local -A exceptions=(${(pws: :)${${(M)${(f)scutil_output}:# *[0-9] : [A-Za-z0-9/\*]*}/:}})
 
     # HTTP Proxy
     if (( $info[HTTPEnable] )); then
@@ -33,4 +34,7 @@
         export all_proxy="$http_proxy"
         export ALL_PROXY="$all_proxy"
     fi
+
+    # No Proxy
+    export no_proxy="${(j:,:)exceptions}"
 }
