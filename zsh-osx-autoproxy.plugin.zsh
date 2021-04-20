@@ -3,7 +3,7 @@
 # Sukka (https://skk.moe)
 # hguandl (https://hguandl.com)
 
-() {
+proxy_reload() {
     local scutil_output=$(scutil --proxy)
     local -A info=(${(pws: :)${${(M)${(f)scutil_output}:# *[A-Za-z] : [A-Za-z0-9]*}/:}})
     local -A exceptions=(${(pws: :)${${(M)${(f)scutil_output}:# *[0-9] : [A-Za-z0-9/\*]*}/:}})
@@ -37,4 +37,24 @@
 
     # No Proxy
     export no_proxy="${(j:,:)exceptions}"
+}
+
+proxy_unset() {
+    unset http_proxy
+    unset HTTP_PROXY
+
+    unset https_proxy
+    unset HTTPS_PROXY
+
+    unset ftp_proxy
+    unset FTP_PROXY
+
+    unset all_proxy
+    unset ALL_PROXY
+
+    unset no_proxy
+}
+
+() {
+    proxy_reload
 }
